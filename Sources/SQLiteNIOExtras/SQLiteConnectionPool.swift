@@ -188,7 +188,7 @@ actor SQLiteConnectionPool {
     private func makeConnection() async throws -> SQLiteConnection {
         let connection = try await SQLiteConnection.open(
             storage: configuration.storage,
-            logger: configuration.logger
+            logger: Logger.current
         )
         do {
             let foreignKeys = configuration.foreignKeysMode
@@ -224,7 +224,7 @@ actor SQLiteConnectionPool {
             .result
 
         if case .failure(let error) = result {
-            configuration.logger.warning(
+            Logger.current.warning(
                 "Failed to close SQLite connection",
                 metadata: [
                     "error": "\(error)"

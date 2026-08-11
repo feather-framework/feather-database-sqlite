@@ -3,9 +3,9 @@
 SQLite driver implementation for the abstract [Feather Database](https://github.com/feather-framework/feather-database) Swift API package.
 
 [
-    ![Release: 1.0.0-rc.1](https://img.shields.io/badge/Release-1%2E0%2E0--rc%2E1-F05138)
+    ![Release: 1.0.0-rc.2](https://img.shields.io/badge/Release-1%2E0%2E0--rc%2E2-F05138)
 ](
-    https://github.com/feather-framework/feather-database-sqlite/releases/tag/1.0.0-rc.1
+    https://github.com/feather-framework/feather-database-sqlite/releases/tag/1.0.0-rc.2
 )
 
 ## Features
@@ -36,7 +36,7 @@ SQLite driver implementation for the abstract [Feather Database](https://github.
 Add the dependency to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/feather-framework/feather-database-sqlite", exact: "1.0.0-rc.1"),
+.package(url: "https://github.com/feather-framework/feather-database-sqlite", exact: "1.0.0-rc.2"),
 ```
 
 Then add `FeatherDatabaseSQLite` to your target dependencies:
@@ -53,7 +53,7 @@ To enable an additional trait on the package, update the package dependency:
 ```diff
 .package(
     url: "https://github.com/feather-framework/feather-database-sqlite",
-    exact: "1.0.0-rc.1",
+    exact: "1.0.0-rc.2",
 +   traits: [
 +       .defaults, 
 +       "ServiceLifecycle",
@@ -85,19 +85,15 @@ import SQLiteNIOExtras
 import FeatherDatabase
 import FeatherDatabaseSQLite
 
-var logger = Logger(label: "example")
-logger.logLevel = .info
-
 let configuration = SQLiteClient.Configuration(
     storage: .file(path: "/Users/me/db.sqlite"),
-    logger: logger
+    logger: Logger.current
 )
 
 let client = SQLiteClient(configuration: configuration)
 
 let database = DatabaseClientSQLite(
-    client: client,
-    logger: logger
+    client: client
 )
 
 try await client.run()
@@ -120,6 +116,8 @@ for try await item in result {
 
 await client.shutdown()
 ```
+
+The package uses `Logger.current` from [swift-log](https://github.com/apple/swift-log) for database logging.
 
 ## Other database drivers
 

@@ -26,19 +26,17 @@ struct SQLiteNIOExtrasTestSuite {
     private func runUsingTestClient(
         _ closure: (SQLiteClient) async throws -> Void
     ) async throws {
-        var logger = Logger(label: "test.sqlite.client")
-        logger.logLevel = .info
-
         let configuration = SQLiteClient.Configuration(
-            storage: .file(path: makeTemporaryDatabasePath()),
-            logger: logger,
+            storage: .file(path: makeTemporaryDatabasePath())
         )
         let client = SQLiteClient(configuration: configuration)
 
-        try await client.run()
-        defer { Task { await client.shutdown() } }
+        try await withLogger(Logger(label: "sqlite-test")) { _ in
+            try await client.run()
+            defer { Task { await client.shutdown() } }
 
-        try await closure(client)
+            try await closure(client)
+        }
     }
 
     @Test
@@ -259,12 +257,8 @@ struct SQLiteNIOExtrasTestSuite {
         let dbPath =
             "/tmp/feather-lock-\(UInt64.random(in: 0...UInt64.max)).sqlite"
 
-        var logger = Logger(label: "test.sqlite.lock.warmup")
-        logger.logLevel = .info
-
         let config = SQLiteClient.Configuration(
             storage: .file(path: dbPath),
-            logger: logger,
             minimumConnections: 1,
             maximumConnections: 1,
             journalMode: .delete,

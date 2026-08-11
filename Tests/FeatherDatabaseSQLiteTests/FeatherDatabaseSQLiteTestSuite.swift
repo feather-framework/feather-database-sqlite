@@ -23,29 +23,26 @@ struct FeatherDatabaseSQLiteTestSuite {
     func runUsingTestDatabaseClient(
         _ closure: ((DatabaseClientSQLite) async throws -> Void)
     ) async throws {
-        var logger = Logger(label: "test")
-        logger.logLevel = .info
+        try await withLogger(Logger(label: "sqlite-test")) { _ in
+            let configuration = SQLiteClient.Configuration(
+                storage: .memory,
+            )
 
-        let configuration = SQLiteClient.Configuration(
-            storage: .memory,
-            logger: logger
-        )
+            let client = SQLiteClient(configuration: configuration)
 
-        let client = SQLiteClient(configuration: configuration)
+            let database = DatabaseClientSQLite(
+                client: client
+            )
 
-        let database = DatabaseClientSQLite(
-            client: client,
-            logger: logger
-        )
-
-        try await client.run()
-        do {
-            try await closure(database)
-            await client.shutdown()
-        }
-        catch {
-            await client.shutdown()
-            throw error
+            try await client.run()
+            do {
+                try await closure(database)
+                await client.shutdown()
+            }
+            catch {
+                await client.shutdown()
+                throw error
+            }
         }
     }
 
@@ -1616,10 +1613,9 @@ extension FeatherDatabaseSQLiteTestSuite {
 
         let configuration = SQLiteClient.Configuration(
             storage: .memory,
-            logger: logger,
         )
         let client = SQLiteClient(configuration: configuration)
-        let database = DatabaseClientSQLite(client: client, logger: logger)
+        let database = DatabaseClientSQLite(client: client)
         let service = DatabaseServiceSQLite(client)
 
         let serviceGroup = ServiceGroup(
@@ -1663,12 +1659,8 @@ extension FeatherDatabaseSQLiteTestSuite {
 
     @Test
     func serviceLifecycleCancellationShutsDownClient() async throws {
-        var logger = Logger(label: "test")
-        logger.logLevel = .info
-
         let configuration = SQLiteClient.Configuration(
-            storage: .memory,
-            logger: logger
+            storage: .memory
         )
         let client = SQLiteClient(configuration: configuration)
         let service = DatabaseServiceSQLite(client)
@@ -1704,8 +1696,7 @@ extension FeatherDatabaseSQLiteTestSuite {
         logger.logLevel = .info
 
         let configuration = SQLiteClient.Configuration(
-            storage: .memory,
-            logger: logger
+            storage: .memory
         )
         let client = SQLiteClient(configuration: configuration)
         let service = DatabaseServiceSQLite(client)
@@ -1745,13 +1736,11 @@ extension FeatherDatabaseSQLiteTestSuite {
         logger.logLevel = .info
 
         let configuration = SQLiteClient.Configuration(
-            storage: .memory,
-            logger: logger
+            storage: .memory
         )
         let client = SQLiteClient(configuration: configuration)
         let database = DatabaseClientSQLite(
-            client: client,
-            logger: logger
+            client: client
         )
 
         enum MigrationError: Error {
@@ -1814,8 +1803,7 @@ extension FeatherDatabaseSQLiteTestSuite {
         logger.logLevel = .info
 
         let configuration = SQLiteClient.Configuration(
-            storage: .memory,
-            logger: logger
+            storage: .memory
         )
         let client = SQLiteClient(configuration: configuration)
         let service = DatabaseServiceSQLite(client)

@@ -47,8 +47,6 @@ public final class SQLiteClient: Sendable {
         public let minimumConnections: Int
         /// Maximum number of pooled connections to allow.
         public let maximumConnections: Int
-        /// Logger used for pool operations.
-        public let logger: Logger
         /// Journal mode applied to each pooled connection.
         public let journalMode: JournalMode?
         /// Busy timeout, in milliseconds, applied to each pooled connection.
@@ -59,7 +57,6 @@ public final class SQLiteClient: Sendable {
         /// Create a SQLite client configuration.
         /// - Parameters:
         ///   - storage: The SQLite storage to use.
-        ///   - logger: The logger for database operations.
         ///   - minimumConnections: The minimum number of pooled connections.
         ///   - maximumConnections: The maximum number of pooled connections.
         ///   - journalMode: The journal mode to apply to connections.
@@ -67,7 +64,6 @@ public final class SQLiteClient: Sendable {
         ///   - busyTimeoutMilliseconds: The busy timeout to apply, in milliseconds.
         public init(
             storage: SQLiteConnection.Storage,
-            logger: Logger,
             minimumConnections: Int = 1,
             maximumConnections: Int = System.coreCount,
             journalMode: JournalMode? = nil,
@@ -83,7 +79,6 @@ public final class SQLiteClient: Sendable {
             self.storage = storage
             self.minimumConnections = minimumConnections
             self.maximumConnections = maximumConnections
-            self.logger = logger
             self.journalMode = journalMode
             self.foreignKeysMode = foreignKeysMode
             self.busyTimeoutMilliseconds = busyTimeoutMilliseconds

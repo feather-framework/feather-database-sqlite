@@ -43,10 +43,10 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.14.0"),
         .package(url: "https://github.com/vapor/sqlite-nio", from: "1.12.0"),
         .package(url: "https://github.com/swift-server/swift-service-lifecycle", from: "2.8.0"),
-        .package(url: "https://github.com/feather-framework/feather-database", exact: "1.0.0-rc.1"),
+        .package(url: "https://github.com/feather-framework/feather-database", exact: "1.0.0-rc.2"),
         // [docc-plugin-placeholder]
     ],
     targets: [
