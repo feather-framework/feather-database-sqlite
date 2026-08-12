@@ -6,7 +6,6 @@
 //
 
 import FeatherDatabase
-import Logging
 import SQLiteNIO
 
 extension DatabaseQuery {
@@ -50,7 +49,6 @@ public struct DatabaseConnectionSQLite: DatabaseConnection {
     public typealias RowSequence = DatabaseRowSequenceSQLite
 
     var connection: SQLiteConnection
-    public var logger: Logger
 
     /// Execute a SQLite query on this connection.
     ///

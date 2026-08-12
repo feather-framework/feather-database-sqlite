@@ -1,13 +1,13 @@
 {
-  "originHash" : "f951e492bbf3c68bb512d30e55b02b36748ad1765728fae1b9bec14e2a58fb38",
+  "originHash" : "b8a10fc04105896e97e3e96881895221abcd9e1c1a92838b4c05c78a608a8b80",
   "pins" : [
     {
       "identity" : "feather-database",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/feather-framework/feather-database",
       "state" : {
-        "revision" : "0b862ac3ee31859e2c8a54b06390ee92d1a7c0b4",
-        "version" : "1.0.0-rc.1"
+        "revision" : "d290d92b2617ad5768c293c4edcdd66b4f178d48",
+        "version" : "1.0.0-rc.2"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log",
       "state" : {
-        "revision" : "2778fd4e5a12a8aaa30a3ee8285f4ce54c5f3181",
-        "version" : "1.9.1"
+        "revision" : "3ffafb9722d5d918c614feb496c8789a3b59d222",
+        "version" : "1.15.0"
       }
     },
     {
