@@ -5,11 +5,32 @@
 //  Created by Tibor Bödecs on 2026. 01. 10.
 //
 
-import FeatherDatabase
+public import FeatherDatabase
 import SQLiteNIO
 
 public struct DatabaseRowSQLite: DatabaseRow {
     var row: SQLiteRow
+
+    public var columns: [String] {
+        row.columns.map(\.name)
+    }
+
+    public func contains(column: String) -> Bool {
+        row.column(column) != nil
+    }
+
+    public func decodeNil(column: String) throws(DecodingError) -> Bool {
+        guard let data = row.column(column) else {
+            throw .keyNotFound(
+                SQLiteColumnKey(stringValue: column),
+                .init(
+                    codingPath: [],
+                    debugDescription: "Missing data for column \(column)."
+                )
+            )
+        }
+        return data.isNull
+    }
 
     struct SingleValueDecoder: Decoder, SingleValueDecodingContainer {
 
@@ -117,4 +138,11 @@ public struct DatabaseRowSQLite: DatabaseRow {
             )
         }
     }
+}
+
+private struct SQLiteColumnKey: CodingKey {
+    let stringValue: String
+    let intValue: Int? = nil
+    init(stringValue: String) { self.stringValue = stringValue }
+    init?(intValue: Int) { return nil }
 }

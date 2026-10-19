@@ -12,12 +12,12 @@ actor SQLiteConnectionPool {
 
     private struct Waiter {
         let id: Int
-        let continuation: CheckedContinuation<SQLiteConnection, Error>
+        let continuation: CheckedContinuation<SQLiteConnection, any Error>
     }
 
     private struct TransactionWaiter {
         let id: Int
-        let continuation: CheckedContinuation<Void, Error>
+        let continuation: CheckedContinuation<Void, any Error>
     }
 
     private let configuration: SQLiteClient.Configuration

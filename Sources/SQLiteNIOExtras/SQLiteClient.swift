@@ -7,7 +7,13 @@
 
 import Logging
 import NIOCore
-import SQLiteNIO
+public import SQLiteNIO
+
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
+import Foundation
+#endif
 
 /// A SQLite client backed by a connection pool.
 ///
@@ -65,12 +71,15 @@ public final class SQLiteClient: Sendable {
         public init(
             storage: SQLiteConnection.Storage,
             minimumConnections: Int = 1,
-            maximumConnections: Int = System.coreCount,
+            maximumConnections: Int? = nil,
             journalMode: JournalMode? = nil,
             foreignKeysMode: ForeignKeysMode = .on,
             busyTimeoutMilliseconds: Int? = nil
         ) {
             precondition(minimumConnections >= 0)
+            let maximumConnections =
+                maximumConnections
+                ?? ProcessInfo.processInfo.activeProcessorCount
             precondition(maximumConnections >= 1)
             precondition(minimumConnections <= maximumConnections)
             if let busyTimeoutMilliseconds {
