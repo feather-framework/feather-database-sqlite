@@ -5,8 +5,8 @@
 //  Created by Tibor Bödecs on 2026. 01. 10..
 //
 
-import FeatherDatabase
-import SQLiteNIOExtras
+public import FeatherDatabase
+public import SQLiteNIOExtras
 
 /// A SQLite-backed database client.
 ///

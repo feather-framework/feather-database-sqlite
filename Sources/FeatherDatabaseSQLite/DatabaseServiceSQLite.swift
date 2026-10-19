@@ -7,8 +7,8 @@
 
 #if ServiceLifecycle
 
-import SQLiteNIOExtras
-import ServiceLifecycle
+public import SQLiteNIOExtras
+public import ServiceLifecycle
 
 /// A `Service` wrapper around an `SQLiteClient`.
 public struct DatabaseServiceSQLite: Service {

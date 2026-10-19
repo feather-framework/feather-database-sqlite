@@ -44,4 +44,4 @@ test:
 	swift test --parallel
 
 docker-test:
-	docker build -t feather-database-sqlite-tests . -f ./docker/tests/Dockerfile && docker run --rm feather-database-sqlite-tests
+	docker compose run --build --rm test bash -lc 'swift test --build-path /tmp/swift-build --parallel --enable-code-coverage --enable-all-traits && swift test --build-path /tmp/swift-build --parallel --enable-code-coverage --disable-default-traits'

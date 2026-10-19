@@ -1,25 +1,21 @@
-// swift-tools-version:6.1
+// swift-tools-version:6.3
 import PackageDescription
 
-// NOTE: https://github.com/swift-server/swift-http-server/blob/main/Package.swift
-var defaultSwiftSettings: [SwiftSetting] =
-[
-    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0441-formalize-language-mode-terminology.md
+let swiftSettings: [SwiftSetting] = [
     .swiftLanguageMode(.v6),
-    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0444-member-import-visibility.md
+    .strictMemorySafety(),
+    .treatAllWarnings(as: .error),
+    .enableUpcomingFeature("InternalImportsByDefault"),
+    .enableUpcomingFeature("ExistentialAny"),
     .enableUpcomingFeature("MemberImportVisibility"),
-    // https://forums.swift.org/t/experimental-support-for-lifetime-dependencies-in-swift-6-2-and-beyond/78638
+    .enableUpcomingFeature("InferIsolatedConformances"),
+    .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+    .enableUpcomingFeature("ImmutableWeakCaptures"),
+    .enableUpcomingFeature("StrictConcurrency"),
+    .enableExperimentalFeature("SuppressedAssociatedTypes"),
+    .enableExperimentalFeature("LifetimeDependence"),
     .enableExperimentalFeature("Lifetimes"),
-    // https://github.com/swiftlang/swift/pull/65218
-    .enableExperimentalFeature("AvailabilityMacro=FeatherDatabaseSQLite 1.0:macOS 15.0, iOS 18.0, tvOS 18.0, watchOS 11.0, visionOS 2.0"),
 ]
-
-#if compiler(>=6.2)
-defaultSwiftSettings.append(
-    // https://github.com/swiftlang/swift-evolution/blob/main/proposals/0461-async-function-isolation.md
-    .enableUpcomingFeature("NonisolatedNonsendingByDefault")
-)
-#endif
 
 
 let package = Package(
@@ -32,6 +28,7 @@ let package = Package(
         .visionOS(.v2),
     ],
     products: [
+        .library(name: "SQLiteNIOExtras", targets: ["SQLiteNIOExtras"]),
         .library(name: "FeatherDatabaseSQLite", targets: ["FeatherDatabaseSQLite"]),
     ],
     traits: [
@@ -43,11 +40,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log", from: "1.14.0"),
-        .package(url: "https://github.com/vapor/sqlite-nio", from: "1.12.0"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.16.1"),
+        .package(url: "https://github.com/vapor/sqlite-nio", from: "1.13.2"),
         .package(url: "https://github.com/swift-server/swift-service-lifecycle", from: "2.8.0"),
-        .package(url: "https://github.com/feather-framework/feather-database", exact: "1.0.0-rc.2"),
-        // [docc-plugin-placeholder]
+        .package(
+            url: "https://github.com/feather-framework/feather-database",
+            exact: "1.0.0-rc.3"
+        ),
     ],
     targets: [
         .target(
@@ -56,7 +55,7 @@ let package = Package(
                 .product(name: "Logging", package: "swift-log"),
                 .product(name: "SQLiteNIO", package: "sqlite-nio"),
             ],
-            swiftSettings: defaultSwiftSettings
+            swiftSettings: swiftSettings
         ),
         .target(
             name: "FeatherDatabaseSQLite",
@@ -69,14 +68,14 @@ let package = Package(
                     condition: .when(traits: ["ServiceLifecycle"])
                 ),
             ],
-            swiftSettings: defaultSwiftSettings
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "SQLiteNIOExtrasTests",
             dependencies: [
                 .target(name: "SQLiteNIOExtras"),
             ],
-            swiftSettings: defaultSwiftSettings
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "FeatherDatabaseSQLiteTests",
@@ -90,7 +89,7 @@ let package = Package(
                     )
                 ),
             ],
-            swiftSettings: defaultSwiftSettings
+            swiftSettings: swiftSettings
         ),
     ]
 )

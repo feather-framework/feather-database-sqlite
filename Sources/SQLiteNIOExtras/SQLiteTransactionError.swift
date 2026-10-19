@@ -22,19 +22,19 @@ public struct SQLiteTransactionError: Error {
     /// The error thrown while beginning the transaction.
     ///
     /// Set when the `BEGIN` step fails.
-    public internal(set) var beginError: Error?
+    public internal(set) var beginError: (any Error)?
     /// The error thrown inside the transaction closure.
     ///
     /// Set when the closure fails before commit.
-    public internal(set) var closureError: Error?
+    public internal(set) var closureError: (any Error)?
     /// The error thrown while committing the transaction.
     ///
     /// Set when the `COMMIT` step fails.
-    public internal(set) var commitError: Error?
+    public internal(set) var commitError: (any Error)?
     /// The error thrown while rolling back the transaction.
     ///
     /// Set when the `ROLLBACK` step fails.
-    public internal(set) var rollbackError: Error?
+    public internal(set) var rollbackError: (any Error)?
 
     /// Create a SQLite transaction error payload.
     ///
@@ -49,10 +49,10 @@ public struct SQLiteTransactionError: Error {
     init(
         file: String = #fileID,
         line: Int = #line,
-        beginError: Error? = nil,
-        closureError: Error? = nil,
-        commitError: Error? = nil,
-        rollbackError: Error? = nil
+        beginError: (any Error)? = nil,
+        closureError: (any Error)? = nil,
+        commitError: (any Error)? = nil,
+        rollbackError: (any Error)? = nil
     ) {
         self.file = file
         self.line = line

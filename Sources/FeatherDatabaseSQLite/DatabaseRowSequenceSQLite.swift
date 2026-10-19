@@ -5,7 +5,7 @@
 //  Created by Tibor Bödecs on 2026. 01. 10.
 //
 
-import FeatherDatabase
+public import FeatherDatabase
 import SQLiteNIO
 
 /// A query result backed by SQLite rows.

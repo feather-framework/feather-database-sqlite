@@ -5,8 +5,15 @@
 //  Created by Tibor Bödecs on 2026. 01. 10.
 //
 
-import FeatherDatabase
+public import FeatherDatabase
+import NIOCore
 import SQLiteNIO
+
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
+import Foundation
+#endif
 
 extension DatabaseQuery {
 
@@ -30,10 +37,24 @@ extension DatabaseQuery {
                 sqliteBindings.append(.integer(value ? 1 : 0))
             case .int(let value):
                 sqliteBindings.append(.integer(value))
+            case .int32(let value):
+                sqliteBindings.append(.integer(Int(value)))
             case .double(let value):
                 sqliteBindings.append(.float(value))
+            case .float(let value):
+                sqliteBindings.append(.float(Double(value)))
             case .string(let value):
                 sqliteBindings.append(.text(value))
+            case .uuid(let value):
+                sqliteBindings.append(.text(value.uuidString))
+            case .date(let value):
+                sqliteBindings.append(.text(value.ISO8601Format()))
+            case .data(let value):
+                sqliteBindings.append(.blob(ByteBuffer(bytes: value)))
+            case .json(let value):
+                sqliteBindings.append(
+                    .text(String(decoding: value, as: UTF8.self))
+                )
             }
         }
 
